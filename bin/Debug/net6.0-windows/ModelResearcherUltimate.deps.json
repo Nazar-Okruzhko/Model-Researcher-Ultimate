@@ -1,0 +1,60 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "ModelResearcherUltimate/1.0.0": {
+        "dependencies": {
+          "OpenTK": "3.3.3",
+          "OpenTK.GLControl": "3.3.3"
+        },
+        "runtime": {
+          "ModelResearcherUltimate.dll": {}
+        }
+      },
+      "OpenTK/3.3.3": {
+        "runtime": {
+          "lib/net20/OpenTK.dll": {
+            "assemblyVersion": "3.3.3.0",
+            "fileVersion": "3.3.3.0"
+          }
+        }
+      },
+      "OpenTK.GLControl/3.3.3": {
+        "dependencies": {
+          "OpenTK": "3.3.3"
+        },
+        "runtime": {
+          "lib/net20/OpenTK.GLControl.dll": {
+            "assemblyVersion": "3.3.3.0",
+            "fileVersion": "3.3.3.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ModelResearcherUltimate/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "OpenTK/3.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KtnygHEuYj4+agNsZRtzh5iSiKlelDZvDB/OhfebEvIDX/97Pzygv8n5llZHgrI7Xa29vvkucVBeN55R6/k+4w==",
+      "path": "opentk/3.3.3",
+      "hashPath": "opentk.3.3.3.nupkg.sha512"
+    },
+    "OpenTK.GLControl/3.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OJKQN4s7tCzdDUoLmrEEwAzywlhIu/vmLO+qhUG4FAUKwaxNqyGYbdLgzgH4RtNzP6Qs8ZDx0RxNHXyn/DPgUA==",
+      "path": "opentk.glcontrol/3.3.3",
+      "hashPath": "opentk.glcontrol.3.3.3.nupkg.sha512"
+    }
+  }
+}
