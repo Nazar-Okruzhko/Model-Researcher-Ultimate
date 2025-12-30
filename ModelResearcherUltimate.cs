@@ -1,5 +1,5 @@
 // ======================
-// ModelResearcherUltimate - by Nazar Okruzhko
+// ModelResearcherUltimate - By Nazar Okruzhko
 // ======================
 using System;
 using System.Collections.Generic;
@@ -100,6 +100,7 @@ namespace ModelResearcher
         private Label hexFloatLabel, hexShortLabel, hexHalfFloatLabel, hexShortSignedLabel, hexAddressLabel;
         private CheckBox highlightVerticesCheck, highlightFacesCheck, highlightUVsCheck, highlightNormalsCheck;
         private int selectedByteOffset = -1;
+        private int lastCursorPosition = -1;
         
         // UV Map display
         private PictureBox uvMapBox;
@@ -107,7 +108,7 @@ namespace ModelResearcher
         // ---- OpenGL specific fields ----
         private GLControl glControl;
         private bool glLoaded = false;
-        private Color polygonsColor = Color.FromArgb(3, 103, 124); // NEW COLOR
+        private Color polygonsColor = Color.FromArgb(3, 103, 124);
         private bool wireframe = false;
         private float rotationX = -30, rotationY = 45, zoom = 150.0f;
         private Point lastMousePos;
@@ -123,7 +124,7 @@ namespace ModelResearcher
 
         public MainForm()
         {
-            Text = "Model Researcher Ultimate - by Nazar Okruzhko";
+            Text = "Model Researcher Ultimate - By Nazar Okruzhko";
             Size = new Size(1600, 900);
             BackColor = Color.White;
             AllowDrop = true;
@@ -147,7 +148,7 @@ namespace ModelResearcher
             viewMenu.DropDownItems.Add(wireItem);
 
             var helpMenu = new ToolStripMenuItem("Help");
-            helpMenu.DropDownItems.Add("About", null, (s, e) => MessageBox.Show("Model Researcher Ultimate - by Nazar Okruzhko\n2025", "About"));
+            helpMenu.DropDownItems.Add("About", null, (s, e) => MessageBox.Show("Model Researcher Ultimate by Nazar Okruzhko 2025", "About"));
 
             menuStrip.Items.AddRange(new ToolStripItem[] { fileMenu, viewMenu, helpMenu });
             MainMenuStrip = menuStrip;
@@ -178,7 +179,7 @@ namespace ModelResearcher
             CreateViewport();
         }
 
-        // Mesh tab - REORGANIZED with UVs between Vertices and Faces, UV Map at bottom
+        // Mesh tab
         private void CreateMeshTab()
         {
             meshTab = new TabPage("Mesh");
@@ -256,7 +257,7 @@ namespace ModelResearcher
             faceFormatCombo.SelectedIndex = 1;
             fg.Controls.Add(faceFormatCombo);
 
-            fg.Controls.Add(new Label { Text = "Padding", Location = new Point(8, 62), Size = new Size(45, 15), ForeColor = Color.Black });
+            fg.Controls.Add(new Label { Text = "Padding:", Location = new Point(8, 62), Size = new Size(45, 15), ForeColor = Color.Black });
             faceInterNum = new NumericUpDown { Location = new Point(55, 60), Size = new Size(70, 20), Maximum = 999 };
             fg.Controls.Add(faceInterNum);
             meshTab.Controls.Add(fg);
@@ -408,12 +409,12 @@ namespace ModelResearcher
             var copyBtn = new Button 
             { 
                 Text = "Copy", 
-                Location = new Point(100, y - 1), 
+                Location = new Point(100, y), 
                 Size = new Size(38, 18), 
                 Font = new Font("Arial", 6f), 
                 FlatStyle = FlatStyle.Flat, 
                 Padding = new Padding(0), 
-                TextAlign = ContentAlignment.MiddleCenter 
+                TextAlign = ContentAlignment.TopCenter
             };
             copyBtn.Click += (s, e) => { if (selectedByteOffset >= 0) Clipboard.SetText($"{selectedByteOffset:X}"); };
             hexPanel.Controls.Add(copyBtn);
@@ -421,7 +422,7 @@ namespace ModelResearcher
             
             highlightVerticesCheck = new CheckBox { Text = "Vertices", Location = new Point(8, y), Checked = true, AutoSize = true };
             highlightVerticesCheck.CheckedChanged += (s, e) => { RenderScene(); uvMapBox.Invalidate(); };
-            highlightUVsCheck = new CheckBox { Text = "UVs", Location = new Point(90, y), Checked = true, AutoSize = true }; // SWAPPED
+            highlightUVsCheck = new CheckBox { Text = "UVs", Location = new Point(90, y), Checked = true, AutoSize = true };
             highlightUVsCheck.CheckedChanged += (s, e) => { RenderScene(); uvMapBox.Invalidate(); };
             hexPanel.Controls.AddRange(new Control[] { highlightVerticesCheck, highlightUVsCheck });
             
@@ -432,13 +433,13 @@ namespace ModelResearcher
             hexPanel.Controls.AddRange(new Control[] { hexFloatIndicator, hexFloatLabel, hexShortIndicator, hexShortLabel });
             y += 20;
             
-            highlightFacesCheck = new CheckBox { Text = "Faces", Location = new Point(8, y), Checked = true, AutoSize = true }; // SWAPPED
+            highlightFacesCheck = new CheckBox { Text = "Faces", Location = new Point(8, y), Checked = true, AutoSize = true };
             highlightFacesCheck.CheckedChanged += (s, e) => RenderScene();
             highlightNormalsCheck = new CheckBox { Text = "Normals", Location = new Point(90, y), Checked = true, AutoSize = true };
             hexPanel.Controls.AddRange(new Control[] { highlightFacesCheck, highlightNormalsCheck });
             
             hexHalfFloatIndicator = new Panel { Location = new Point(315, y), Size = new Size(12, 12), BackColor = Color.Gray, BorderStyle = BorderStyle.FixedSingle };
-            hexHalfFloatLabel = new Label { Text = "Half-Float: $3610", Location = new Point(330, y + 1), Size = new Size(100, 14), Font = new Font("Arial", 8) };
+            hexHalfFloatLabel = new Label { Text = "Half-Float:", Location = new Point(330, y + 1), Size = new Size(100, 14), Font = new Font("Arial", 8) };
             hexShortSignedIndicator = new Panel { Location = new Point(435, y), Size = new Size(12, 12), BackColor = Color.Gray, BorderStyle = BorderStyle.FixedSingle };
             hexShortSignedLabel = new Label { Text = "Short Signed:", Location = new Point(450, y + 1), Size = new Size(100, 14), Font = new Font("Arial", 8) };
             hexPanel.Controls.AddRange(new Control[] { hexHalfFloatIndicator, hexHalfFloatLabel, hexShortSignedIndicator, hexShortSignedLabel });
@@ -457,39 +458,159 @@ namespace ModelResearcher
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
             };
             hexTextBox.SelectionChanged += HexTextBox_SelectionChanged;
+            hexTextBox.KeyDown += HexTextBox_KeyDown;
             hexPanel.Controls.Add(hexTextBox);
+        }
+        
+        // Arrow key navigation for hex cursor
+        private void HexTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (fileData == null) return;
+            
+            int bytesPerLine = 16;
+            int currentByte = selectedByteOffset;
+            
+            if (currentByte < 0) currentByte = 0; // Initialize if not set
+            
+            if (e.KeyCode == Keys.Left)
+            {
+                if (currentByte > 0) currentByte--;
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                if (currentByte < fileData.Length - 1) currentByte++;
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                if (currentByte >= bytesPerLine) currentByte -= bytesPerLine;
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                if (currentByte + bytesPerLine < fileData.Length) currentByte += bytesPerLine;
+                e.Handled = true;
+            }
+            
+            if (e.Handled && currentByte != selectedByteOffset)
+            {
+                selectedByteOffset = currentByte;
+                hexAddressLabel.Text = $"0x{selectedByteOffset:X8}";
+                UpdateHexCursor();
+                UpdateHexIndicators();
+            }
         }
         
         private void HexTextBox_SelectionChanged(object sender, EventArgs e)
         {
             if (fileData == null || hexTextBox.SelectionStart < 0) return;
+            
             string text = hexTextBox.Text;
             int cursorPos = hexTextBox.SelectionStart;
+            
+            // Find current line
             int lineStart = text.LastIndexOf('\n', Math.Max(0, cursorPos - 1)) + 1;
             int lineEnd = text.IndexOf('\n', cursorPos);
             if (lineEnd == -1) lineEnd = text.Length;
+            
             string currentLine = text.Substring(lineStart, lineEnd - lineStart);
+            
+            // Line format: "00000000  XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX  ................"
             if (currentLine.Length > 10)
             {
                 try
                 {
                     int lineOffset = Convert.ToInt32(currentLine.Substring(0, 8), 16);
-                    int posInLine = cursorPos - lineStart - 10;
-                    if (posInLine > 0)
+                    int posInLine = cursorPos - lineStart - 10; // Skip "00000000  "
+                    
+                    if (posInLine >= 0)
                     {
-                        int byteIndex = 0, charCount = 0;
-                        while (charCount < posInLine && byteIndex < 16)
+                        int byteIndex = 0;
+                        int charsSeen = 0;
+                        
+                        // Calculate byte index from character position
+                        // Each byte is "XX " (3 chars), with extra space after 8th byte
+                        while (charsSeen <= posInLine && byteIndex < 16)
                         {
-                            charCount += 3;
-                            if (byteIndex == 7) charCount++;
-                            if (charCount <= posInLine) byteIndex++;
+                            if (byteIndex == 8) charsSeen++; // Extra space after 8th byte
+                            
+                            // If we're within this byte's characters
+                            if (charsSeen <= posInLine && posInLine < charsSeen + 2)
+                            {
+                                // We're on this byte
+                                break;
+                            }
+                            
+                            if (charsSeen <= posInLine)
+                            {
+                                charsSeen += 3; // "XX "
+                                if (charsSeen <= posInLine)
+                                    byteIndex++;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
-                        selectedByteOffset = lineOffset + Math.Max(0, byteIndex - 1);
-                        hexAddressLabel.Text = $"0x{selectedByteOffset:X8}";
-                        UpdateHexIndicators();
+                        
+                        int newOffset = lineOffset + byteIndex;
+                        if (newOffset < fileData.Length && newOffset != selectedByteOffset)
+                        {
+                            selectedByteOffset = newOffset;
+                            hexAddressLabel.Text = $"0x{selectedByteOffset:X8}";
+                            UpdateHexCursor();
+                            UpdateHexIndicators();
+                        }
                     }
                 }
                 catch { }
+            }
+        }
+        
+        // Update light blue hex cursor
+        private void UpdateHexCursor()
+        {
+            if (fileData == null || selectedByteOffset < 0 || selectedByteOffset >= fileData.Length) return;
+            
+            // Temporarily disable selection changed event
+            hexTextBox.SelectionChanged -= HexTextBox_SelectionChanged;
+            
+            try
+            {
+                // Clear previous cursor
+                if (lastCursorPosition >= 0 && lastCursorPosition < hexTextBox.TextLength - 2)
+                {
+                    hexTextBox.Select(lastCursorPosition, 2);
+                    hexTextBox.SelectionBackColor = Color.FromArgb(240, 240, 240);
+                }
+                
+                // Calculate position in hex display
+                int line = selectedByteOffset / 16;
+                int byteInLine = selectedByteOffset % 16;
+                
+                int lineStart = hexTextBox.GetFirstCharIndexFromLine(line);
+                if (lineStart < 0) return;
+                
+                // Position: "00000000  XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX"
+                //           ^0        ^10                     ^49
+                int charPos = lineStart + 10 + (byteInLine * 3) + (byteInLine >= 8 ? 1 : 0);
+                
+                if (charPos >= 0 && charPos + 2 <= hexTextBox.TextLength)
+                {
+                    hexTextBox.Select(charPos, 2);
+                    hexTextBox.SelectionBackColor = Color.FromArgb(150, 215, 230); // Light Blue
+                    lastCursorPosition = charPos;
+                    
+                    // Keep the text cursor at the selected position (don't move it to start)
+                    hexTextBox.SelectionStart = charPos;
+                    hexTextBox.SelectionLength = 0;
+                }
+            }
+            finally
+            {
+                // Re-enable selection changed event
+                hexTextBox.SelectionChanged += HexTextBox_SelectionChanged;
             }
         }
         
@@ -502,13 +623,12 @@ namespace ModelResearcher
                 bool littleEndian = littleEndianRadio.Checked;
                 int offset = selectedByteOffset;
                 
-                // Float value (4 bytes) - selected byte is START of float
+                // Float value (4 bytes)
                 if (offset + 4 <= fileData.Length)
                 {
                     float floatVal = ReadFloat(offset, littleEndian);
                     bool isValid = !float.IsNaN(floatVal) && !float.IsInfinity(floatVal) && floatVal != 0;
                     
-                    // Check if value is too small/large (scientific notation)
                     if (isValid)
                     {
                         float abs = Math.Abs(floatVal);
@@ -525,7 +645,7 @@ namespace ModelResearcher
                     hexFloatIndicator.BackColor = Color.Gray;
                 }
                 
-                // Short unsigned value (2 bytes) - selected byte is START
+                // Short unsigned value (2 bytes)
                 if (offset + 2 <= fileData.Length)
                 {
                     ushort ushortVal = ReadUShort(offset, littleEndian);
@@ -540,14 +660,13 @@ namespace ModelResearcher
                     hexShortIndicator.BackColor = Color.Gray;
                 }
                 
-                // Half-float value (2 bytes) - selected byte is START
+                // Half-float value (2 bytes) - FIXED
                 if (offset + 2 <= fileData.Length)
                 {
                     ushort ushortVal = ReadUShort(offset, littleEndian);
                     float halfVal = ReadHalfFloat(offset, littleEndian);
                     bool isValid = !float.IsNaN(halfVal) && !float.IsInfinity(halfVal) && halfVal != 0;
                     
-                    // Check if value is too small/large
                     if (isValid)
                     {
                         float abs = Math.Abs(halfVal);
@@ -564,7 +683,7 @@ namespace ModelResearcher
                     hexHalfFloatIndicator.BackColor = Color.Gray;
                 }
                 
-                // Short signed value (2 bytes) - selected byte is START
+                // Short signed value (2 bytes) - FIXED
                 if (offset + 2 <= fileData.Length)
                 {
                     short shortVal = ReadShort(offset, littleEndian);
@@ -683,7 +802,7 @@ namespace ModelResearcher
             }
             GL.End();
 
-            // ---- Mesh Drawing with SHADING (non-light-source dependent) ----
+            // ---- Mesh Drawing with SHADING ----
             if (vertices.Count > 0 && faces.Count > 0 && highlightFacesCheck.Checked)
             {
                 GL.Disable(EnableCap.Lighting);
@@ -705,9 +824,8 @@ namespace ModelResearcher
                         Vector3 normal = Vector3.Cross(edge1, edge2);
                         if (normal.Length() > 0) normal = normal.Normalize();
                         
-                        // Simple shading based on normal direction (not light-source dependent)
-                        // Use Y component for basic top-down shading
-                        float shade = Math.Abs(normal.Y) * 0.4f + 0.6f; // Range: 0.6 to 1.0
+                        // Simple shading based on normal direction
+                        float shade = Math.Abs(normal.Y) * 0.4f + 0.6f;
                         
                         Color shadedColor = Color.FromArgb(
                             (int)(polygonsColor.R * shade),
@@ -724,11 +842,11 @@ namespace ModelResearcher
                 GL.End();
             }
 
-            // ---- Draw RED vertices as points (only if checkbox is checked) ----
+            // ---- Draw RED vertices as points ----
             if (vertices.Count > 0 && highlightVerticesCheck.Checked)
             {
                 GL.PointSize(4.0f);
-                GL.Color3(1.0f, 0.0f, 0.0f); // RED
+                GL.Color3(1.0f, 0.0f, 0.0f);
                 GL.Begin(PrimitiveType.Points);
                 foreach (var v in vertices)
                 {
@@ -740,51 +858,67 @@ namespace ModelResearcher
             glControl.SwapBuffers();
         }
         
-        // UV Map rendering
+        // UV Map rendering with error handling
         private void UvMapBox_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.Clear(Color.FromArgb(225, 225, 225)); // #E1E1E1
+            g.Clear(Color.FromArgb(225, 225, 225));
             
             if (uvs.Count == 0 || !highlightUVsCheck.Checked) return;
             
-            int w = uvMapBox.Width;
-            int h = uvMapBox.Height;
-            
-            // Draw UV coordinates in blue
-            using (Pen bluePen = new Pen(Color.Blue, 2))
+            try
             {
-                foreach (var uv in uvs)
+                int w = uvMapBox.Width;
+                int h = uvMapBox.Height;
+                
+                // Draw UV coordinates in blue
+                using (Pen bluePen = new Pen(Color.Blue, 2))
                 {
-                    float x = uv.X * w;
-                    float y = (1.0f - uv.Y) * h; // Flip Y
-                    g.FillEllipse(Brushes.Blue, x - 2, y - 2, 4, 4);
-                }
-            }
-            
-            // Draw lines connecting UVs if we have faces
-            if (faces.Count > 0)
-            {
-                using (Pen bluePen = new Pen(Color.FromArgb(100, 0, 0, 255), 1))
-                {
-                    for (int i = 0; i + 2 < faces.Count; i += 3)
+                    foreach (var uv in uvs)
                     {
-                        int i0 = faces[i], i1 = faces[i + 1], i2 = faces[i + 2];
-                        if (i0 < uvs.Count && i1 < uvs.Count && i2 < uvs.Count)
+                        float x = uv.X * w;
+                        float y = (1.0f - uv.Y) * h;
+                        
+                        // Check for overflow
+                        if (float.IsInfinity(x) || float.IsNaN(x) || float.IsInfinity(y) || float.IsNaN(y))
+                            throw new OverflowException("UV coordinates out of range");
+                        
+                        g.FillEllipse(Brushes.Blue, x - 2, y - 2, 4, 4);
+                    }
+                }
+                
+                // Draw lines connecting UVs if we have faces
+                if (faces.Count > 0)
+                {
+                    using (Pen bluePen = new Pen(Color.FromArgb(100, 0, 0, 255), 1))
+                    {
+                        for (int i = 0; i + 2 < faces.Count; i += 3)
                         {
-                            var uv0 = uvs[i0];
-                            var uv1 = uvs[i1];
-                            var uv2 = uvs[i2];
-                            
-                            float x0 = uv0.X * w, y0 = (1.0f - uv0.Y) * h;
-                            float x1 = uv1.X * w, y1 = (1.0f - uv1.Y) * h;
-                            float x2 = uv2.X * w, y2 = (1.0f - uv2.Y) * h;
-                            
-                            g.DrawLine(bluePen, x0, y0, x1, y1);
-                            g.DrawLine(bluePen, x1, y1, x2, y2);
-                            g.DrawLine(bluePen, x2, y2, x0, y0);
+                            int i0 = faces[i], i1 = faces[i + 1], i2 = faces[i + 2];
+                            if (i0 < uvs.Count && i1 < uvs.Count && i2 < uvs.Count)
+                            {
+                                var uv0 = uvs[i0];
+                                var uv1 = uvs[i1];
+                                var uv2 = uvs[i2];
+                                
+                                float x0 = uv0.X * w, y0 = (1.0f - uv0.Y) * h;
+                                float x1 = uv1.X * w, y1 = (1.0f - uv1.Y) * h;
+                                float x2 = uv2.X * w, y2 = (1.0f - uv2.Y) * h;
+                                
+                                g.DrawLine(bluePen, x0, y0, x1, y1);
+                                g.DrawLine(bluePen, x1, y1, x2, y2);
+                                g.DrawLine(bluePen, x2, y2, x0, y0);
+                            }
                         }
                     }
+                }
+            }
+            catch (OverflowException)
+            {
+                // Draw red border to indicate error
+                using (Pen redPen = new Pen(Color.Red, 4))
+                {
+                    g.DrawRectangle(redPen, 2, 2, uvMapBox.Width - 4, uvMapBox.Height - 4);
                 }
             }
         }
@@ -799,6 +933,25 @@ namespace ModelResearcher
                     ParseFaces();
                 }
                 ParseUVs();
+                
+                // Validate UV data before rendering
+                bool hasInvalidUVs = false;
+                foreach (var uv in uvs)
+                {
+                    if (float.IsInfinity(uv.X) || float.IsNaN(uv.X) || float.IsInfinity(uv.Y) || float.IsNaN(uv.Y))
+                    {
+                        hasInvalidUVs = true;
+                        break;
+                    }
+                }
+                
+                if (hasInvalidUVs)
+                {
+                    MessageBox.Show("UV data contains invalid values (NaN or Infinity).\n\nPlease check your UV offset and format settings.", 
+                        "Invalid UV Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
                 uvMapBox.Invalidate();
             }
             catch (Exception ex) 
@@ -819,18 +972,13 @@ namespace ModelResearcher
             int dy = e.Y - lastMousePos.Y;
             if (e.Button == MouseButtons.Left)
             {
-                // Inverted horizontal per user request!
                 rotationY -= dx * 0.5f;
                 rotationX += dy * 0.5f;
-                
-                // CLAMP vertical rotation (FPS-style)
                 rotationX = Math.Max(-89f, Math.Min(89f, rotationX));
-                
                 RenderScene();
             }
             else if (e.Button == MouseButtons.Right)
             {
-                // Panning 5x slower
                 float panSpeed = zoom * 0.001f;
                 float radY = rotationY * (float)Math.PI / 180f;
                 float rightX = (float)Math.Cos(radY);
@@ -961,7 +1109,6 @@ namespace ModelResearcher
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     File.WriteAllText(sfd.FileName, objTextBox.Text);
-                    // NO POP-UP MESSAGE
                 }
             }
         }
@@ -1004,9 +1151,16 @@ namespace ModelResearcher
                 sb.AppendLine();
             }
             hexTextBox.Text = sb.ToString();
+            
+            // Initialize cursor at byte 0
+            selectedByteOffset = 0;
+            lastCursorPosition = -1;
+            hexAddressLabel.Text = "0x00000000";
+            UpdateHexCursor();
+            UpdateHexIndicators();
         }
 
-        // --- OBJ window update (FULL EXPORT - ALL VERTICES AND FACES) ---
+        // --- OBJ window update (FULL EXPORT) ---
         private void UpdateOBJView()
         {
             if (vertices.Count == 0) { objTextBox.Text = "# No mesh data loaded"; return; }
@@ -1016,7 +1170,6 @@ namespace ModelResearcher
             sb.AppendLine($"# Faces: {faces.Count / 3}");
             sb.AppendLine();
             
-            // Export ALL vertices
             foreach (var v in vertices)
                 sb.AppendLine($"v {v.X.ToString(CultureInfo.InvariantCulture)} {v.Y.ToString(CultureInfo.InvariantCulture)} {v.Z.ToString(CultureInfo.InvariantCulture)}");
             
@@ -1034,7 +1187,6 @@ namespace ModelResearcher
             }
             sb.AppendLine();
             
-            // Export ALL faces
             for (int i = 0; i < faces.Count; i += 3)
             {
                 if (i + 2 < faces.Count)
@@ -1050,7 +1202,6 @@ namespace ModelResearcher
                 ParseVertices();
                 ParseFaces();
                 
-                // Check for face/vertex mismatch
                 if (faces.Count > 0 && vertices.Count > 0)
                 {
                     int maxFaceIndex = faces.Max();
@@ -1066,7 +1217,6 @@ namespace ModelResearcher
                 if (autoCalcCheck.Checked) CalculateNormals();
                 UpdateOBJView();
                 RenderScene();
-                // NO POP-UP MESSAGE
             }
             catch (Exception ex) 
             { 
@@ -1081,7 +1231,6 @@ namespace ModelResearcher
                 ParseVertices();
                 ParseFaces();
                 
-                // Check for face/vertex mismatch
                 if (faces.Count > 0 && vertices.Count > 0)
                 {
                     int maxFaceIndex = faces.Max();
@@ -1106,7 +1255,6 @@ namespace ModelResearcher
                 if (faces.Count > 0) sb.AppendLine($"# Face indices MIN: 0 MAX: {faces.Max()}");
                 sb.AppendLine();
                 
-                // Print first 100 vertices for preview
                 for (int i = 0; i < Math.Min(100, vertices.Count); i++)
                 {
                     var v = vertices[i];
@@ -1114,7 +1262,6 @@ namespace ModelResearcher
                 }
                 sb.AppendLine();
                 
-                // Print first 300 face indices for preview
                 for (int i = 0; i < Math.Min(300, faces.Count); i += 3)
                 {
                     if (i + 2 < faces.Count)
@@ -1122,7 +1269,6 @@ namespace ModelResearcher
                 }
                 objTextBox.Text = sb.ToString();
                 
-                // Color the hex bytes
                 ColorHexBytes();
             }
             catch (Exception ex) 
@@ -1132,22 +1278,27 @@ namespace ModelResearcher
         }
         
         // ========================================
-        // ULTRA-OPTIMIZED: ColorHexBytes
+        // COMPLETE BYTE COLORING - ALL BYTES
         // ========================================
-        // Uses range batching + proper byte calculation to be lightning fast
         private void ColorHexBytes()
         {
             if (fileData == null) return;
             
-            // Temporarily disable redrawing
             SendMessage(hexTextBox.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+            
+            // Disable selection changed event during coloring
+            hexTextBox.SelectionChanged -= HexTextBox_SelectionChanged;
             
             try
             {
-                // Build byte-to-color mapping for O(1) lookup
+                // Save current cursor position
+                int savedByteOffset = selectedByteOffset;
+                int savedCursorPos = lastCursorPosition;
+                
+                // Build complete byte-to-color mapping
                 Dictionary<int, Color> byteColors = new Dictionary<int, Color>();
                 
-                // Precompute vertex byte colors
+                // Vertices (RED)
                 if (highlightVerticesCheck.Checked)
                 {
                     int vertStart = (int)vertOffsetNum.Value;
@@ -1155,7 +1306,7 @@ namespace ModelResearcher
                     int vertInter = (int)vertInterNum.Value;
                     string vertType = vertTypeCombo.Text;
                     int bytesPerComp = vertType == "Float" ? 4 : 2;
-                    int vertBytesPerElement = bytesPerComp * 3; // X, Y, Z
+                    int vertBytesPerElement = bytesPerComp * 3;
                     int vertStride = vertBytesPerElement + vertInter;
                     
                     for (int i = 0; i < vertCount; i++)
@@ -1163,12 +1314,12 @@ namespace ModelResearcher
                         int elementStart = vertStart + i * vertStride;
                         for (int b = 0; b < vertBytesPerElement && elementStart + b < fileData.Length; b++)
                         {
-                            byteColors[elementStart + b] = Color.FromArgb(255, 0, 0); // RED
+                            byteColors[elementStart + b] = Color.FromArgb(255, 0, 0);
                         }
                     }
                 }
                 
-                // Precompute UV byte colors
+                // UVs (YELLOW)
                 if (highlightUVsCheck.Checked)
                 {
                     int uvStart = (int)uvOffsetNum.Value;
@@ -1176,7 +1327,7 @@ namespace ModelResearcher
                     int uvInter = (int)uvInterNum.Value;
                     string uvType = uvTypeCombo.Text;
                     int bytesPerComp = uvType == "Float" ? 4 : 2;
-                    int uvBytesPerElement = bytesPerComp * 2; // U, V
+                    int uvBytesPerElement = bytesPerComp * 2;
                     int uvStride = uvBytesPerElement + uvInter;
                     
                     for (int i = 0; i < uvCount; i++)
@@ -1184,12 +1335,12 @@ namespace ModelResearcher
                         int elementStart = uvStart + i * uvStride;
                         for (int b = 0; b < uvBytesPerElement && elementStart + b < fileData.Length; b++)
                         {
-                            byteColors[elementStart + b] = Color.FromArgb(255, 255, 0); // YELLOW
+                            byteColors[elementStart + b] = Color.FromArgb(255, 255, 0);
                         }
                     }
                 }
                 
-                // Precompute face byte colors
+                // Faces (GREEN)
                 if (highlightFacesCheck.Checked)
                 {
                     int faceStart = (int)faceOffsetNum.Value;
@@ -1204,12 +1355,12 @@ namespace ModelResearcher
                         int elementStart = faceStart + i * faceStride;
                         for (int b = 0; b < faceBytesPerIndex && elementStart + b < fileData.Length; b++)
                         {
-                            byteColors[elementStart + b] = Color.FromArgb(0, 255, 0); // GREEN
+                            byteColors[elementStart + b] = Color.FromArgb(0, 255, 0);
                         }
                     }
                 }
                 
-                // Precompute normal byte colors (highest priority)
+                // Normals (BLUE - highest priority)
                 if (highlightNormalsCheck.Checked)
                 {
                     int normStart = (int)normOffsetNum.Value;
@@ -1217,7 +1368,7 @@ namespace ModelResearcher
                     int normInter = (int)normInterNum.Value;
                     string normType = normTypeCombo.Text;
                     int bytesPerComp = normType == "Float" ? 4 : 2;
-                    int normBytesPerElement = bytesPerComp * 3; // X, Y, Z
+                    int normBytesPerElement = bytesPerComp * 3;
                     int normStride = normBytesPerElement + normInter;
                     
                     for (int i = 0; i < normCount; i++)
@@ -1225,68 +1376,8 @@ namespace ModelResearcher
                         int elementStart = normStart + i * normStride;
                         for (int b = 0; b < normBytesPerElement && elementStart + b < fileData.Length; b++)
                         {
-                            byteColors[elementStart + b] = Color.FromArgb(0, 0, 255); // BLUE
+                            byteColors[elementStart + b] = Color.FromArgb(0, 0, 255);
                         }
-                    }
-                }
-                
-                // Build color RANGES for ultra-fast rendering
-                List<Tuple<int, int, Color>> colorRanges = new List<Tuple<int, int, Color>>();
-                int maxLines = Math.Min(5000, fileData.Length / 16 + 1);
-                
-                for (int line = 0; line < maxLines; line++)
-                {
-                    int lineOffset = line * 16;
-                    int lineStart = hexTextBox.GetFirstCharIndexFromLine(line);
-                    if (lineStart < 0) break;
-                    
-                    int rangeStart = -1;
-                    int rangeLength = 0;
-                    Color rangeColor = Color.White;
-                    
-                    for (int i = 0; i < 16; i++)
-                    {
-                        int byteOffset = lineOffset + i;
-                        if (byteOffset >= fileData.Length) break;
-                        
-                        int charPos = lineStart + 10 + i * 3 + (i >= 8 ? 1 : 0);
-                        if (charPos + 2 > hexTextBox.TextLength) continue;
-                        
-                        Color color = byteColors.ContainsKey(byteOffset) ? byteColors[byteOffset] : Color.White;
-                        
-                        if (color != Color.White)
-                        {
-                            if (rangeStart == -1)
-                            {
-                                rangeStart = charPos;
-                                rangeLength = 2;
-                                rangeColor = color;
-                            }
-                            else if (rangeColor == color && charPos <= rangeStart + rangeLength + 1)
-                            {
-                                rangeLength = charPos - rangeStart + 2;
-                            }
-                            else
-                            {
-                                colorRanges.Add(new Tuple<int, int, Color>(rangeStart, rangeLength, rangeColor));
-                                rangeStart = charPos;
-                                rangeLength = 2;
-                                rangeColor = color;
-                            }
-                        }
-                        else
-                        {
-                            if (rangeStart != -1)
-                            {
-                                colorRanges.Add(new Tuple<int, int, Color>(rangeStart, rangeLength, rangeColor));
-                                rangeStart = -1;
-                            }
-                        }
-                    }
-                    
-                    if (rangeStart != -1)
-                    {
-                        colorRanges.Add(new Tuple<int, int, Color>(rangeStart, rangeLength, rangeColor));
                     }
                 }
                 
@@ -1295,18 +1386,51 @@ namespace ModelResearcher
                 hexTextBox.SelectionLength = hexTextBox.TextLength;
                 hexTextBox.SelectionBackColor = Color.White;
                 
-                // Apply all color ranges
-                foreach (var range in colorRanges)
+                // Apply colors line by line for ALL bytes
+                int maxLines = Math.Min(10000, fileData.Length / 16 + 1);
+                
+                for (int line = 0; line < maxLines; line++)
                 {
-                    hexTextBox.Select(range.Item1, range.Item2);
-                    hexTextBox.SelectionBackColor = range.Item3;
+                    int lineOffset = line * 16;
+                    int lineStart = hexTextBox.GetFirstCharIndexFromLine(line);
+                    if (lineStart < 0) break;
+                    
+                    for (int i = 0; i < 16; i++)
+                    {
+                        int byteOffset = lineOffset + i;
+                        if (byteOffset >= fileData.Length) break;
+                        
+                        // Calculate character position: "00000000  XX XX XX XX XX XX XX XX  XX XX XX XX XX XX XX XX"
+                        int charPos = lineStart + 10 + (i * 3) + (i >= 8 ? 1 : 0);
+                        
+                        // Don't color over the cursor position - cursor takes priority
+                        bool isCursorPosition = (charPos == savedCursorPos);
+                        
+                        if (charPos + 2 <= hexTextBox.TextLength && byteColors.ContainsKey(byteOffset) && !isCursorPosition)
+                        {
+                            hexTextBox.Select(charPos, 2);
+                            hexTextBox.SelectionBackColor = byteColors[byteOffset];
+                        }
+                    }
                 }
                 
-                hexTextBox.Select(0, 0);
+                // Restore hex cursor if it exists
+                if (savedByteOffset >= 0)
+                {
+                    selectedByteOffset = savedByteOffset;
+                    lastCursorPosition = -1; // Force redraw
+                    UpdateHexCursor();
+                }
+                else
+                {
+                    hexTextBox.Select(0, 0);
+                }
             }
             finally
             {
-                // Re-enable redrawing
+                // Re-enable selection changed event
+                hexTextBox.SelectionChanged += HexTextBox_SelectionChanged;
+                
                 SendMessage(hexTextBox.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero);
                 hexTextBox.Invalidate();
             }
@@ -1321,7 +1445,6 @@ namespace ModelResearcher
             string format = vertFormatCombo.Text, type = vertTypeCombo.Text;
             int bytesPerVertex = type == "Float" ? 4 : 2, stride = bytesPerVertex * 3 + inter;
             
-            // Bounds check
             if (offset + count * stride > fileData.Length)
             {
                 throw new Exception($"Vertex data out of bounds!\nRequired: {offset + count * stride} bytes\nAvailable: {fileData.Length} bytes");
@@ -1376,13 +1499,11 @@ namespace ModelResearcher
             bool littleEndian = littleEndianRadio.Checked;
             int bytesPerIndex = type == "Integer" ? 4 : (type == "Short" ? 2 : 1);
             
-            // Bounds check
             if (offset + count * bytesPerIndex > fileData.Length)
             {
                 throw new Exception($"Face data out of bounds!\nRequired: {offset + count * bytesPerIndex} bytes\nAvailable: {fileData.Length} bytes");
             }
             
-            // Read raw indices first
             List<int> rawIndices = new List<int>();
             for (int i = 0; i < count; i++)
             {
@@ -1394,12 +1515,11 @@ namespace ModelResearcher
                 rawIndices.Add(index);
             }
             
-            // Convert based on format
             if (format == "Triangles")
             {
                 faces = rawIndices;
             }
-            else if (format == "TStrip") // Triangle Strip
+            else if (format == "TStrip")
             {
                 for (int i = 0; i + 2 < rawIndices.Count; i++)
                 {
@@ -1411,16 +1531,14 @@ namespace ModelResearcher
                     }
                     else
                     {
-                        // Reverse winding for odd triangles
                         faces.Add(rawIndices[i]);
                         faces.Add(rawIndices[i + 2]);
                         faces.Add(rawIndices[i + 1]);
                     }
                 }
             }
-            else if (format == "TStripFF") // Triangle Strip - First Face only
+            else if (format == "TStripFF")
             {
-                // Skip first face marker (usually 0xFFFF or similar)
                 int startIdx = 1;
                 for (int i = startIdx; i + 2 < rawIndices.Count; i++)
                 {
@@ -1438,15 +1556,13 @@ namespace ModelResearcher
                     }
                 }
             }
-            else if (format == "Quads") // Quads to Triangles
+            else if (format == "Quads")
             {
                 for (int i = 0; i + 3 < rawIndices.Count; i += 4)
                 {
-                    // First triangle: 0,1,2
                     faces.Add(rawIndices[i]);
                     faces.Add(rawIndices[i + 1]);
                     faces.Add(rawIndices[i + 2]);
-                    // Second triangle: 0,2,3
                     faces.Add(rawIndices[i]);
                     faces.Add(rawIndices[i + 2]);
                     faces.Add(rawIndices[i + 3]);
@@ -1463,7 +1579,6 @@ namespace ModelResearcher
             string format = uvFormatCombo.Text;
             int bytesPerCoord = type == "Float" ? 4 : 2, stride = bytesPerCoord * 2 + inter;
             
-            // Bounds check
             if (offset + count * stride > fileData.Length)
             {
                 throw new Exception($"UV data out of bounds!\nRequired: {offset + count * stride} bytes\nAvailable: {fileData.Length} bytes");
@@ -1536,7 +1651,6 @@ namespace ModelResearcher
             if (!littleEndian) Array.Reverse(bytes);
             ushort half = BitConverter.ToUInt16(bytes, 0);
             
-            // Convert IEEE 754 half precision to float
             int sign = (half >> 15) & 0x1;
             int exponent = (half >> 10) & 0x1F;
             int mantissa = half & 0x3FF;
@@ -1545,7 +1659,6 @@ namespace ModelResearcher
             {
                 if (mantissa == 0)
                     return sign == 1 ? -0f : 0f;
-                // Denormalized number
                 return (sign == 1 ? -1f : 1f) * (float)Math.Pow(2, -14) * (mantissa / 1024f);
             }
             else if (exponent == 31)
@@ -1555,7 +1668,6 @@ namespace ModelResearcher
                 return float.NaN;
             }
             
-            // Normalized number
             return (sign == 1 ? -1f : 1f) * (float)Math.Pow(2, exponent - 15) * (1f + mantissa / 1024f);
         }
         
