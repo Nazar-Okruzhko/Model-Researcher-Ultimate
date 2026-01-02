@@ -6,7 +6,8 @@ Hello, Nazar Okruzhko here maybe some of you know me from Reddit or Sketchfab, I
 
 I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's based on the original "Model Researcher" which is based on the "Model Inspector".
 
-<img width="1920" height="1080" alt="Screenshot (1500)" src="https://github.com/user-attachments/assets/c7952279-fea6-4f96-851b-3e0e1568e839" />
+<img width="1920" height="1080" alt="Screenshot (1532)" src="https://github.com/user-attachments/assets/c8c1c3dc-9123-4189-8d8c-7e283d016440" />
+
 
 [BETA Screenshot] - It's a fully Open Source Program written in C#
 
