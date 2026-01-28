@@ -1,7 +1,8 @@
-Model-Researcher-Ultimate
+# Model-Researcher-Ultimate
 Hello, Nazar Okruzhko here maybe some of you know me from Reddit or Sketchfab, I am an ID Tech 5 expert, I am very newbie/noob at reverse engineering just started a few months ago but made some progress over the past few weeks, expecially for ID Tech 5 and 6 games...
 
 I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's based on the original "Model Researcher" which is based on the "Model Inspector".
+
 <img width="1920" height="1080" alt="Screenshot (1835)" src="https://github.com/user-attachments/assets/a539bde9-f7b7-4dac-8003-8c63cfa198c5" />
 [BETA Screenshot]
 
