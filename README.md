@@ -69,24 +69,26 @@ But how do all those models store their 3D Data?
 Well, the answer is simple, there is no magic here, All 3D Models are just made up of *Vertecies*, *Faces*, *Vertex UV Coordinates* and *Vertex Normal Coordinates*
 They are definatelly *must* somewhere there in your file (this place is called buffer) and there is absolutelly no extra magic in here.
 
-This is how the Vertecies look like:
-v  1.0 4.0 3.0 <= X, Y, Z matrix coordinates (usually from 0.01 to 1000)
-v  2.0 3.0 4.0 <= Point values so are usually floats
-v  6.0 2.0 3.0 <= Usually stable, values don't varry to much in max and min values
+example.obj:
 
-This is how faces looks like:
-f  1 2 3 <= Takes all those previous vertecies and makes a triangle out of them
+    This is how the Vertecies look like:
+    v  1.0 4.0 3.0 <= X, Y, Z matrix coordinates (usually from 0.01 to 1000)
+    v  2.0 3.0 4.0 <= Point values so are usually floats
+    v  6.0 2.0 3.0 <= Usually stable, values don't varry to much in max and min values
 
-This is how UV Vertex coords look lke:
-vt  0.2 0.3 <= 2D coordinate of the first vertex (usually from 0.1 to 1.0)
-vt  0.5 0.2 <= Point values so are usually floats
-vt  0.3 0.1 <= Usually stable, values don't warry to much in max and min values
+    This is how faces looks like:
+    f  1 2 3 <= Takes all those previous vertecies and makes a triangle out of them
 
-This is how Vertex normals look like:
-[not so important actually]
-vn  0.745 0.845 0.360 <= X, Y, Z matriz coordinates (usually from 0.01 to 1)
-vn  0.320 0.625 0.270 <= Point values so are usually floats, so "v2 x, y, z"
-vn  0.430 0.320 0.390 <= Usually stable, values don't warry much in max and min values
+    This is how UV Vertex coords look lke:
+    vt  0.2 0.3 <= 2D coordinate of the first vertex (usually from 0.1 to 1.0)
+    vt  0.5 0.2 <= Point values so are usually floats
+    vt  0.3 0.1 <= Usually stable, values don't warry to much in max and min values
+
+    This is how Vertex normals look like:
+    [not so important actually]
+    vn  0.745 0.845 0.360 <= X, Y, Z matriz coordinates (usually from 0.01 to 1)
+    vn  0.320 0.625 0.270 <= Point values so are usually floats, so "v2 x, y, z"
+    vn  0.430 0.320 0.390 <= Usually stable, values don't warry much in max and min values
 
 The result is a simple triangle that has it's own UV Map too.
 This is how the simplest 3D Model format OBJ stores their 3D Model data, hovewer we can say that all of the binary models store their 3D Data in OBJ file format there is just one more thing to it.
