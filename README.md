@@ -5,7 +5,8 @@ I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models fro
 
 <img width="1920" height="1080" alt="Screenshot (2015)" src="https://github.com/user-attachments/assets/31959487-1c1e-44d1-94b4-eaf5597e0cb9" />
 
-![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)\
+![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)
+
 After getting a fully ready Un/Decompressed and Un/Decrypted Binary 3D Model file, this program can be used to find how the 3D Data is stored, Vertecies, UV Coords and Faces, in any unsupported format by finding the Offsets (Entry points) for Vertecies, UV Coords and Faces and finding how the Data is organized (Separate Buffers or Structured Buffers with Vertecies and UV Coords together separated by padding), we can find a Vertex and Face counts as well as the Buffer header/markers and then just export models into OBJ Files. I made this tool on December 28th, 2025 as for the Ultimate edition. Release build requires .Net 6.0 to run.
 
 I've managed to dig up a Legendary BJ Blazkowicz model using Model Researcher and really liked the idea of the program being for the first time able to extract 3D model from any proprietary 3D Model files. I liked the design so much so I literally created Model Researcher "Ultimate", I really liked this software so I made my ultimate response. The version 1.0.0 is currently stable.
@@ -35,16 +36,27 @@ This tool allows for exposing Binary 3D Data files for:
 • Normals: Offset, Count, Padding, Format\
 (Which are the actual key elements for extracting full 3D Data from binary files)
 
-Example Parameter file:\
-[Big-Endian]\
-\
-ROOT:\
-VB 0xD4, 6919, 20, XZY, Float\
-VTB 0x0E, 6919, 24, UV, Float\
-FB 0x361B4, 28680, 0 Triangles, Short
+Example "PMR" Parameter file:
 
-Shortcuts: F1 Print, F2 Render, F3 View UVs, F4 Flip UVs.
-Tool has support for Multi-Submesh system, Diffuse Textures, Parameter files and Scripting.
+    [Big-Endian]
+    
+    ROOT:
+    VB 0x7BFD0, 4672, 20, XZY, Float
+    VTB 0x7BFDC, 4672, 24, UV, Float
+    FB 0xA07D0, 26340, 0, Triangles, Short
+    
+    Mesh 1:
+    VB 0x5B55, 7854, 20, XZY, Float
+    VTB 0x5B61, 7854, 24, UV, Float
+    FB 0x43115, 41588, 0, Triangles, Short
+    
+    Mesh 2:
+    VB 0x167, 418, 20, XZY, Float
+    VTB 0x173, 418, 24, UV, Float
+    FB 0x35A7, 2306, 0, Triangles, Short
+
+[Shortcuts: F1 Print, F2 Render, F3 View UVs, F4 Flip UVs]\
+[Tool has support for Multi-Submesh system, Diffuse Textures, Parameter files and Scripting]\
 [The example script for BMD6MODEL files is present as default in-program script]
 
 ## INTRODUCTION
