@@ -3,7 +3,7 @@ Hello, Nazar Okruzhko here maybe some of you know me from Reddit or Sketchfab, I
 
 I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's based on the original "Model Researcher" which is based on the "Model Inspector".
 
-<img width="1920" height="1080" alt="Screenshot (1835)" src="https://github.com/user-attachments/assets/a539bde9-f7b7-4dac-8003-8c63cfa198c5" />
+<img width="1920" height="1080" alt="Screenshot (2015)" src="https://github.com/user-attachments/assets/31959487-1c1e-44d1-94b4-eaf5597e0cb9" />
 
 ![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)\
 After getting a fully ready Un/Decompressed and Un/Decrypted Binary 3D Model file, this program can be used to find how the 3D Data is stored, Vertecies, UV Coords and Faces, in any unsupported format by finding the Offsets (Entry points) for Vertecies, UV Coords and Faces and finding how the Data is organized (Separate Buffers or Structured Buffers with Vertecies and UV Coords together separated by padding), we can find a Vertex and Face counts as well as the Buffer header/markers and then just export models into OBJ Files. I made this tool on December 28th, 2025 as for the Ultimate edition. Release build requires .Net 6.0 to run.
@@ -20,7 +20,7 @@ Main features:\
 • C# .NET for good performance\
 • F1 F2 F3 F4 - Shortcut hacks\
 • Parameter files (Load/Save)\
-• Diffuse textures\
+• Diffuse textures
 
 (I am also planning to make tools for other ID Tech Engines, and Mario games too).
 
