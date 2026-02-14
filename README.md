@@ -4,33 +4,23 @@ Hello, Nazar Okruzhko here maybe some of you know me from Reddit or Sketchfab, I
 I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's based on the original "Model Researcher" which is based on the "Model Inspector".
 
 <img width="1920" height="1080" alt="Screenshot (1835)" src="https://github.com/user-attachments/assets/a539bde9-f7b7-4dac-8003-8c63cfa198c5" />
-[BETA Screenshot]
 
+![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)\
 After getting a fully ready Un/Decompressed and Un/Decrypted Binary 3D Model file, this program can be used to find how the 3D Data is stored, Vertecies, UV Coords and Faces, in any unsupported format by finding the Offsets (Entry points) for Vertecies, UV Coords and Faces and finding how the Data is organized (Separate Buffers or Structured Buffers with Vertecies and UV Coords together separated by padding), we can find a Vertex and Face counts as well as the Buffer header/markers and then just export models into OBJ Files. I made this tool on December 28th, 2025 as for the Ultimate edition. Release build requires .Net 6.0 to run.
 
 I've managed to dig up a Legendary BJ Blazkowicz model using Model Researcher and really liked the idea of the program being for the first time able to extract 3D model from any proprietary 3D Model files. I liked the design so much so I literally created Model Researcher "Ultimate", I really liked this software so I made my ultimate response. The version 1.0.0 is currently stable.
 
-Main features:
-
-• All in One Windows Bundle <- Super comfortable fast-paced menu
-
-• Made to eat the multitasking
-
-• Improved Camera navigation
-
-• Comfortable HEX Viewer
-
-• Drag and drop support
-
-• Fast Copy-Pasting OBJ file
-
-• C# .NET for good performance
-
-• F1 F2 F3 F4 - Shortcut hacks
-
-• Parameter files (Load/Save)
-
-• Diffuse textures
+Main features:\
+• All in One Windows Bundle\
+• Made to eat the multitasking\
+• Improved Camera navigation\
+• Comfortable HEX Viewer\
+• Drag and drop support\
+• Fast Copy-Pasting OBJ file\
+• C# .NET for good performance\
+• F1 F2 F3 F4 - Shortcut hacks\
+• Parameter files (Load/Save)\
+• Diffuse textures\
 
 (I am also planning to make tools for other ID Tech Engines, and Mario games too).
 
@@ -38,26 +28,19 @@ Main features:
 
 Model Researcher Ultimate is a program for Reverse Engineering/Studying binary 3D model files.
 
-This tool allows for exposing Binary file for:
+This tool allows for exposing Binary 3D Data files for:
+• Vertex: Offset, Count, Padding, Format\
+• UVs: Offset, Count, Padding, Format\
+• Face: Offset, Count, Padding, Format\
+• Normals: Offset, Count, Padding, Format\
+(Which are the actual key elements for extracting full 3D Data from binary files)
 
-• Vertex: Offset, Count, Padding, Format
-
-• UVs: Offset, Count, Padding, Format
-
-• Face: Offset, Count, Padding, Format
-
-• Normals: Offset, Count, Padding, Format
-
-
-Example Parameter file:
-[Big-Endian]
-
-ROOT:
-
-VB 0xD4, 6919, 20, XZY, Float
-
-VTB 0x0E, 6919, 24, UV, Float
-
+Example Parameter file:\
+[Big-Endian]\
+\
+ROOT:\
+VB 0xD4, 6919, 20, XZY, Float\
+VTB 0x0E, 6919, 24, UV, Float\
 FB 0x361B4, 28680, 0 Triangles, Short
 
 Shortcuts: F1 Print, F2 Render, F3 View UVs, F4 Flip UVs.
