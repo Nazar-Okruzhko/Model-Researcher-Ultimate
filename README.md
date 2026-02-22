@@ -256,4 +256,7 @@ Changing Offfset (oftenly) or Endianess or Type will instanly give the different
 
 There is just one small but very important step left, most of the time those binary files leave also values like Vertex count (UV Coords and Vertex Normals count is the same as Vertex always), Face count, buffer mark and even Vertex stride! (Vertex Stride = Vertex Padding + 12, UV Coords stride = UV Coords stride + 8). They are essentially at the begginning of the mesh buffer  and are pretty easy to find and are always placed in the same way hovewer, this time I personally recommend finding them using the dedicated HEX viewer, my recommendadions are IM Hex, truly the open-sourse king in terms of ease of use.
 
-Edited December 13, 2025 by user3678
+### **Skeleton support is now AVAILABLE!**
+<img width="1920" height="1080" alt="Screenshot (2283) - Copy" src="https://github.com/user-attachments/assets/e313ee03-e333-4e63-a2b3-6e266c32c310" />
+
+Edited December 28, 2025 by user3678
