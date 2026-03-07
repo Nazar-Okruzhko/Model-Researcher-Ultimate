@@ -27,6 +27,10 @@ Main features:\
 
 ## Getting Started
 
+
+
+https://github.com/user-attachments/assets/e5cbb8a6-0b10-475e-8404-48a3dce611b8
+
 Model Researcher Ultimate is a program for Reverse Engineering/Studying binary 3D model files.
 
 This tool allows for exposing Binary 3D Data files for:
