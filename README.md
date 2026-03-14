@@ -263,4 +263,4 @@ There is just one small but very important step left, most of the time those bin
 ### **Skeleton support is now AVAILABLE!**
 <img width="1920" height="1080" alt="Screenshot (2316)" src="https://github.com/user-attachments/assets/8ad4ccc1-484e-4d7f-bdc9-3043ec2c1862" />
 
-Edited December 28, 2025 by user3678
+### DDS, TGA and JPG Texture support added to version v1.0!!!
