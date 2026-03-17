@@ -1,15 +1,17 @@
 # Model-Researcher-Ultimate
-Hello, Nazar Okruzhko here maybe some of you know me from Reddit or Sketchfab, I am an ID Tech 5 expert, I am very newbie/noob at reverse engineering just started a few months ago but made some progress over the past few weeks, expecially for ID Tech 5 and 6 games...
+Hello, it's Nazar Okruzhko, maybe some of you know me from Reddit or Sketchfab, I am an ID Tech 5 expert, I was used to be a Real Begginer at reverse engineering, just started a some time ago but Reverseing ID Tech 5 & ID Tech 6 & ID Tech 7 games made some real progress over the past few weeks...
 
-I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's based on the original "Model Researcher" which is based on the "Model Inspector".
+I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's design based on the original "Model Researcher" which design is based on the "Model Inspector" which is based of "Hex2Obj".
 
-<img width="1920" height="1080" alt="Screenshot (2015)" src="https://github.com/user-attachments/assets/31959487-1c1e-44d1-94b4-eaf5597e0cb9" />
+<img width="1920" height="1080" alt="Screenshot (2855)" src="https://github.com/user-attachments/assets/9dfc05e0-63ef-4aa4-bbb4-ffc910914cde" />
 
 ![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)
 
-After getting a fully ready Un/Decompressed and Un/Decrypted Binary 3D Model file, this program can be used to find how the 3D Data is stored, Vertecies, UV Coords and Faces, in any unsupported format by finding the Offsets (Entry points) for Vertecies, UV Coords and Faces and finding how the Data is organized (Separate Buffers or Structured Buffers with Vertecies and UV Coords together separated by padding), we can find a Vertex and Face counts as well as the Buffer header/markers and then just export models into OBJ Files. I made this tool on December 28th, 2025 as for the Ultimate edition. Release build requires .Net 6.0 to run.
+"What is Model Researcher Ultimate?"
 
-I've managed to dig up a Legendary BJ Blazkowicz model using Model Researcher and really liked the idea of the program being for the first time able to extract 3D model from any proprietary 3D Model files. I liked the design so much so I literally created Model Researcher "Ultimate", I really liked this software so I made my ultimate response. The version 1.0.0 is currently stable.
+It's essentially a Binary Reader BE/LE that reads values in Formats like "Float/Half-Float/Short-Signed" depending on the values from the Config Tab, right from the HEX Viewer Tab marking the Values it reads, it then writes out sequentially 3 or 2 Values each line and adds corresponding prefix for them (v = for vertecies, vn = for normals, vt = for uv coords, f = for faces) & writes it into the OBJ File window, it then re-reads this content as OBJ File and Renders it out in 3D Viewer & UV Map Box... The final assembled 3D Model, then exposes the 3D File's internal structure in HEX Viewer & Configs from "Mesh" Tab allowing then to be used in "Mesh_Extraction" tab allowing for full 3D Model extraction with all the sub-meshes without writing a single line of Python Code...
+
+(I've managed to pull off a Legendary BJ Blazkowicz model using Original Model Researcher! So I really liked the idea of this program being for the first time able to extract 3D model from any Proprietary 3D Model files by any begginer. I liked the design so much so I literally created my own Model Researcher "Ultimate", I really liked this software so after posting over 530 Different Models on SketchFab, I've made my ultimate response). The version 1.0.0 is currently stable.
 
 Main features:\
 • All in One Windows Bundle\
@@ -33,7 +35,7 @@ https://github.com/user-attachments/assets/e5cbb8a6-0b10-475e-8404-48a3dce611b8
 
 Model Researcher Ultimate is a program for Reverse Engineering/Studying binary 3D model files.
 
-This tool allows for exposing Binary 3D Data files for:
+This tool allows for exposing Binary 3D Data files for:\
 • Vertex: Offset, Count, Padding, Format\
 • UVs: Offset, Count, Padding, Format\
 • Face: Offset, Count, Padding, Format\
