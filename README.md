@@ -1,7 +1,7 @@
 # Model-Researcher-Ultimate
-Hello, it's Nazar Okruzhko, maybe some of you know me from Reddit or Sketchfab, I am an ID Tech 5 expert, I was used to be a Real Begginer at reverse engineering, just started a some time ago but Reverseing ID Tech 5 & ID Tech 6 & ID Tech 7 games made some real progress over the past few weeks...
+Hello, it's Nazar Okruzhko, some of you might know me from Reddit or Sketchfab, I am an ID Tech 5 expert in terms of Reverse Engineering, I was used to be a real Noob at reverse engineering, just started a some time ago but Reversing ID Tech 5 & ID Tech 6 & ID Tech 7 games made me some unreal progress over the past just a few weeks...
 
-I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's design based on the original "Model Researcher" which design is based on the "Model Inspector" which is based of "Hex2Obj".
+I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's design is based on the original "Model Researcher" which design is based on the "Model Inspector" which is based of "Hex2Obj".
 
 <img width="1920" height="1080" alt="Screenshot (2855)" src="https://github.com/user-attachments/assets/9dfc05e0-63ef-4aa4-bbb4-ffc910914cde" />
 
@@ -9,21 +9,32 @@ I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models fro
 
 "What is Model Researcher Ultimate?"
 
-It's essentially a Binary Reader BE/LE that reads values in Formats like "Float/Half-Float/Short-Signed" depending on the values from the Config Tab, right from the HEX Viewer Tab marking the Values it reads, it then writes out sequentially 3 or 2 Values each line and adds corresponding prefix for them (v = for vertecies, vn = for normals, vt = for uv coords, f = for faces) & writes it into the OBJ File window, it then re-reads this content as OBJ File and Renders it out in 3D Viewer & UV Map Box... The final assembled 3D Model, then exposes the 3D File's internal structure in HEX Viewer & Configs from "Mesh" Tab allowing then to be used in "Mesh_Extraction" tab allowing for full 3D Model extraction with all the sub-meshes without writing a single line of Python Code...
+It's essentially a Binary Reader BE/LE that reads values in Formats like "Float/Half-Float/Short-Signed" depending on the parameter values from the Config Tab, as shown in the HEX Viewer marking the Values it reads in different colors, it then writes them out sequentially 3 or 2 Values for each line and adds corresponding prefix for them (v = for vertecies, vn = for normals, vt = for uv coords, f = for faces) & writes it into the OBJ File Window, it then re-reads this content as OBJ File and Renders it out in 3D Viewer & UV Map Box... The final assembled 3D Model, then exposes the 3D File's internal structure in HEX Viewer & Configs from "Mesh" Tab or "Skeleton" Tab for Rig, allowing then to be used in "Mesh_Extraction" tab allowing for full 3D Model extraction with all the sub-meshes without writing a single line of Python Code...
 
-(I've managed to pull off a Legendary BJ Blazkowicz model using Original Model Researcher! So I really liked the idea of this program being for the first time able to extract 3D model from any Proprietary 3D Model files by any begginer. I liked the design so much so I literally created my own Model Researcher "Ultimate", I really liked this software so after posting over 530 Different Models on SketchFab, I've made my ultimate response). The version 1.0.0 is currently stable.
+(I've managed to pull off a Legendary BJ Blazkowicz model using Original Model Researcher! At this point I knew that nothing is impossible, and I've became the Developer of the Ultimate Reboot, So I really liked the idea of this program being for the first time able to extract 3D model from any Proprietary 3D Model files by any begginer without any deep knowledge. I liked the design so much, that I've literally created my own Model Researcher "Ultimate", I really liked this software, I've also started Programming on GitHub after reaching posting over +530 Different Models on SketchFab, I've made my ultimate response).\
+The version 1.0 is currently stable!
 
-Main features:\
+Main new features:\
 • All in One Windows Bundle\
 • Made to eat the multitasking\
 • Improved Camera navigation\
 • Comfortable HEX Viewer\
-• Drag and drop support\
+• Invalid Value highlightion is back!\
+• The "Auto-Update" feature is back!\
+• Switch between HEX <-> DEC Base Address mode\
+• Wireframe Render mode Option
 • Fast Copy-Pasting OBJ file\
+• Drag and drop support\
+• Search for & Vertex Buffer search for instant Vertex Buffer exposure\
+• Got to Buffer Offset/Buffer End, Set as Offset/Count in context menu\
+• Potential Count Value highlightion in HEX Viewer\
+• The "Detect-Size" checkbox for all Buffers\
 • C# .NET for good performance\
-• F1 F2 F3 F4 - Shortcut hacks\
-• Parameter files (Load/Save)\
-• Diffuse textures
+• F1 F2 F3 F4 - Shortcut hacks (Old)\
+• The "Mesh_Extraction" Tab for Scriptless Mesh extraction\
+• The "Skeleton" Tab For Rigged Model Extraction\
+• PMR Parameter files (Load/Save & Drag and Drop)\
+• Diffuse textures (Multi-submesh support)
 
 (I am also planning to make tools for other ID Tech Engines, and Mario games too).
 
@@ -66,39 +77,45 @@ Example "PMR" Parameter file:
 [The example script for BMD6MODEL files is present as default in-program script]
 
 ## INTRODUCTION
-But how do all those models store their 3D Data?
-Well, the answer is simple, there is no magic here, All 3D Models are just made up of *Vertecies*, *Faces*, *Vertex UV Coordinates* and *Vertex Normal Coordinates*
-They are definatelly *must* somewhere there in your file (this place is called buffer) and there is absolutelly no extra magic in here.
+But how do all those models store their 3D Data?\
+Well, the answer is simple, there is absolutelly no magic here, All 3D Models are just made up of *Vertecies*, *Normals*, *UV Coordinates* and *Faces*, (Additionally with Blend Indices, Blend Weights & Skeleton Data but it's only and only for rigged models, anything else is not an actual 3D Model Data), all of them can be directly converted into the OBJ File Format!\
+All those 4 Elements *MUST* be stored somewhere in your file, (this place is called buffer) of course the Size "Count" and the location "Offset" will be different for each Model and finding those *Buffers Parameters will be the key in opening the gates for the full 3D Model Extraction. (The Tutorial is also available in "Help" -> "Qucik Start Guide").
 
 example.obj:
 
     This is how the Vertecies look like:
-    v  1.0 4.0 3.0 <= X, Y, Z matrix coordinates (usually from 0.01 to 1000)
-    v  2.0 3.0 4.0 <= Point values so are usually floats
+    v  1.0 4.0 3.0 <= X, Y, Z matrix coordinates (usually from 0.001 to 1000)
+    v  2.0 3.0 4.0 <= Point values so are usually Floats/Half-Floats
     v  6.0 2.0 3.0 <= Usually stable, values don't varry to much in max and min values
 
-    This is how faces looks like:
-    f  1 2 3 <= Takes all those previous vertecies and makes a triangle out of them
-
-    This is how UV Vertex coords look lke:
-    vt  0.2 0.3 <= 2D coordinate of the first vertex (usually from 0.1 to 1.0)
-    vt  0.5 0.2 <= Point values so are usually floats
-    vt  0.3 0.1 <= Usually stable, values don't warry to much in max and min values
-
     This is how Vertex normals look like:
-    [not so important actually]
-    vn  0.745 0.845 0.360 <= X, Y, Z matriz coordinates (usually from 0.01 to 1)
-    vn  0.320 0.625 0.270 <= Point values so are usually floats, so "v2 x, y, z"
+    [not so important actually, you can even skip]
+    vn  0.745 0.845 0.360 <= X, Y, Z matriz coordinates (usually from -1 to 1)
+    vn  0.320 0.625 0.270 <= Point values so are usually Floats/Half-Floats, so "v2 x, y, z"
     vn  0.430 0.320 0.390 <= Usually stable, values don't warry much in max and min values
 
-The result is a simple triangle that has it's own UV Map too.
-This is how the simplest 3D Model format OBJ stores their 3D Model data, hovewer we can say that all of the binary models store their 3D Data in OBJ file format there is just one more thing to it.
+    This is how UV Vertex coords look lke:
+    vt  0.2 0.3 <= 2D coordinate of the first vertex (usually from 0.0001 to 1.0, Tiled UV Maps go beyond 1.0)
+    vt  0.5 0.2 <= Point values so are usually Floats/Half-Floats
+    vt  0.3 0.1 <= Usually stable, values don't warry to much in max and min values
+
+    This is how faces looks like:
+    f  1 2 3 <= Takes all those previous vertecies and makes a "Face", a triangle out of them
+
+
+The result is a simple triangle that has it's own UV Map too and Shading.\
+• The Vertecies Build up individual unique placed Flaoting points\
+• The Faces connect them together\
+• The UV Coordinates Map texture to a those points\
+• The Normals tell how Shading wil work for those points\
+• (The Normals are optional and can be auto generated...)\
+This is how the simplest 3D Model, it's in OBJ File Format and that's how all Binary Models store their 3D Data, the only problem is that they are in Binary 💀.
 
 ### Buffers and Binary Data
 
-Binary formats have only two ways of storing their 3D Data (Aside faces) in a Separate way and Structured way, here is how it looks like:
+Binary 3D Model formats have only two ways of storing their 3D Data (Aside faces) in a Separate way and Structured way, here is how it looks like:
 
-Separate way:
+Sequentional mode:
 
 vertex_buffer = [
 
@@ -130,7 +147,7 @@ vertex_normals_buffer = {
     ...
 }
 
-Structured way:
+Blocked mode:
 
 buffer = [
 
@@ -142,7 +159,7 @@ buffer = [
 
 ### BINARY DATA
 
-The data in each file can be viewed as binary no matter if it was readable or unreadable or even empty before, viewing it in binary will spoil immediatelly everything.
+The data in each file can be viewed as binary no matter if it was readable or unreadable or even empty before in notepad, viewing it in binary will spoil immediatelly everything.
 And while binary files are all the same, the way we read it changes drastically everything! To view your binary file yiou must dump HEX from it or load it into HEX Viewer:
 
 Example file:
@@ -158,7 +175,7 @@ Example file:
     0012C030  62 40 21 90 58 43 05 DD 1C 41 BC B3 78 40 D7 63   b@!.XC...A..x@.c <= Eight line contains actual float Vertex coordinates! But looks again random in ASCII strings!
 
 
-But what are those floats, shorts and ASCII?
+But what are those floats, half-floats, shorts and ASCII?
 The Bits are the smallest units of computer data they are either 0 or 1 and comma.
 The Bytes hgovewer is a combined 8 Bits that can actually start representing some data. Those are Bits ranging from 0 to 255, where 0 is also precieved as an important value (So 256 combinations), (I represented them in HEX, 0-F values, so a 256 combinations)
 Here is one Byte for example: 10110111 (32 16 8 4 2 1 = 256 bits as sum), combining Bytes together we can make multiple data types.
@@ -258,7 +275,7 @@ bad.obj:
 
 ### Finally
 
-Changing Offfset (oftenly) or Endianess or Type will instanly give the different results including BAd data drastically turning into a GOOD data so keep that  in mind and play with those offsets.
+Changing Offset (oftenly) and Endianess or Type have the stongest influence and will instanly give the different results including bad data drastically turning into a GOOD data so keep that  in mind and play with those offsets.
 
 There is just one small but very important step left, most of the time those binary files leave also values like Vertex count (UV Coords and Vertex Normals count is the same as Vertex always), Face count, buffer mark and even Vertex stride! (Vertex Stride = Vertex Padding + 12, UV Coords stride = UV Coords stride + 8). They are essentially at the begginning of the mesh buffer  and are pretty easy to find and are always placed in the same way hovewer, this time I personally recommend finding them using the dedicated HEX viewer, my recommendadions are IM Hex, truly the open-sourse king in terms of ease of use.
 
