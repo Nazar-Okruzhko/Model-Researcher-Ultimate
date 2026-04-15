@@ -3,7 +3,7 @@ Hello, it's Nazar Okruzhko, some of you might know me from Reddit or Sketchfab, 
 
 I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's design is based on the original "Model Researcher" which design is based on the "Model Inspector" which is based of "Hex2Obj".
 
-<img width="1920" height="1080" alt="Screenshot (2855)" src="https://github.com/user-attachments/assets/9dfc05e0-63ef-4aa4-bbb4-ffc910914cde" />
+<img width="1920" height="1080" alt="Screenshot (3232)" src="https://github.com/user-attachments/assets/d6226503-6976-43c6-a967-897d1f88cff9" />
 
 ![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)
 
