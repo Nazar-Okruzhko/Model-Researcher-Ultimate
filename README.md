@@ -5,7 +5,7 @@ I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models fro
 
 <img width="1920" height="1080" alt="Screenshot (3232)" src="https://github.com/user-attachments/assets/d6226503-6976-43c6-a967-897d1f88cff9" />
 
-![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A-Windows%2010-default)
+![Static Badge](https://img.shields.io/badge/Minimal%20Requirements%3A%20-%20Windows%20XP%20-%20Orange)
 
 "What is Model Researcher Ultimate?"
 
