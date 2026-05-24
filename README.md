@@ -280,6 +280,7 @@ Changing Offset (oftenly) and Endianess or Type have the stongest influence and 
 There is just one small but very important step left, most of the time those binary files leave also values like Vertex count (UV Coords and Vertex Normals count is the same as Vertex always), Face count, buffer mark and even Vertex stride! (Vertex Stride = Vertex Padding + 12, UV Coords stride = UV Coords stride + 8). They are essentially at the begginning of the mesh buffer  and are pretty easy to find and are always placed in the same way hovewer, this time I personally recommend finding them using the dedicated HEX viewer, my recommendadions are IM Hex, truly the open-sourse king in terms of ease of use.
 
 ### **Skeleton support is now AVAILABLE!**
-<img width="1920" height="1080" alt="Screenshot (2316)" src="https://github.com/user-attachments/assets/8ad4ccc1-484e-4d7f-bdc9-3043ec2c1862" />
+<img width="1920" height="1080" alt="Screenshot (3812)" src="https://github.com/user-attachments/assets/6efe771a-c8b0-4c15-b3e8-529f6c8ce42f" />
+
 
 ### DDS, TGA and JPG Texture support added to version v1.0!!!
