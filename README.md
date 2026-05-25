@@ -39,7 +39,7 @@ Main new features:\
 (I am also planning to make tools for other ID Tech Engines, and Mario games too).
 
 ## Getting Started
-https://github.com/user-attachments/assets/9abd4822-a255-4aac-a810-2feda39e3b82
+https://github.com/user-attachments/assets/dc7b066f-96db-4615-afe5-1005524e02a9
 
 Model Researcher Ultimate is a program for Reverse Engineering/Studying binary 3D model files.
 
