@@ -1,4 +1,4 @@
-# Model-Researcher-Ultimate
+# <img width="1354" height="194" alt="image" src="https://github.com/user-attachments/assets/ec95fd3f-f7e0-4826-92cc-da654a28b1fe" />
 Hello, it's Nazar Okruzhko, some of you might know me from Reddit or Sketchfab, I am an "ID Tech 5 Expert" in terms of Reverse Engineering, I used to be a real Begginer at reverse engineering, just started a some time ago hovewer Reversing ID Tech 5 / ID Tech 6 / ID Tech 7 / ID Tech 8 games made me grew unrealisticly fast, and over time write some Extraction Scripts. I noticed that I won't be able to countinue writing custom Extraction Scripts, so I decided to release the "Ultimate" Extraction Tools!...
 
 I've made a tool called "Model Researcher Ultimate" for Extracting 3D Models from any games, it's design is based on the original "Model Researcher" which design is based on the "Model Inspector" which is based of "Hex2Obj".
